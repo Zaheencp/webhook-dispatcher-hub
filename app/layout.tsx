@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Webhook Dispatcher & Reliability Hub',
+  title: 'Webhook Dispatcher — Developer Workbench',
   description:
-    'Production-grade developer infrastructure for cryptographic HMAC signing, automated exponential backoff retries, idempotency enforcement, and Dead-Letter Queue isolation.',
+    'Developer infrastructure workbench for cryptographic HMAC signing, automated exponential backoff retries, idempotency enforcement, and Dead-Letter Queue isolation.',
 };
 
 export default function RootLayout({
@@ -13,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark h-full">
-      <body className="min-h-full bg-[#09090b] text-zinc-100 font-sans antialiased selection:bg-zinc-800 selection:text-zinc-100">
+    <html lang="en" className="h-full bg-[#f8fafc]">
+      <body className="min-h-full bg-[#f8fafc] text-slate-900 font-sans antialiased selection:bg-indigo-100 selection:text-indigo-900">
         {children}
       </body>
     </html>

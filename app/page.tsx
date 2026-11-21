@@ -1,15 +1,14 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSession } from '@/lib/client';
 import { Header } from '@/components/Header';
-import { KpiStrip } from '@/components/KpiStrip';
-import { EndpointsManager } from '@/components/EndpointsManager';
-import { EventStream } from '@/components/EventStream';
-import { EventInspectorModal } from '@/components/EventInspectorModal';
+import { EndpointStrip } from '@/components/EndpointStrip';
+import { EventFeed } from '@/components/EventFeed';
+import { EventInspector } from '@/components/EventInspector';
+import { MockReceiverControl } from '@/components/MockReceiverControl';
 import { DispatchModal } from '@/components/DispatchModal';
 import { EndpointModal } from '@/components/EndpointModal';
-import { MockReceiverControl } from '@/components/MockReceiverControl';
 import type { Endpoint, WebhookEvent, DashboardStats } from '@/types';
 
 export default function DashboardPage() {
@@ -27,8 +26,9 @@ export default function DashboardPage() {
   const [endpoints, setEndpoints] = useState<Endpoint[]>([]);
   const [events, setEvents] = useState<WebhookEvent[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
+  const [selectedEndpointFilter, setSelectedEndpointFilter] = useState<string | null>(null);
 
-  const [inspectedEvent, setInspectedEvent] = useState<WebhookEvent | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isDispatchOpen, setIsDispatchOpen] = useState(false);
   const [isCreateEndpointOpen, setIsCreateEndpointOpen] = useState(false);
   const [dispatchEndpointId, setDispatchEndpointId] = useState<string | undefined>(undefined);
@@ -59,18 +59,19 @@ export default function DashboardPage() {
 
       if (eventsRes.ok) {
         const evData = (await eventsRes.json()) as { events: WebhookEvent[] };
-        setEvents(evData.events || []);
+        const fetchedEvents = evData.events || [];
+        setEvents(fetchedEvents);
 
-        if (inspectedEvent) {
-          const updatedInspected = (evData.events || []).find((e) => e.id === inspectedEvent.id);
-          if (updatedInspected) {
-            setInspectedEvent(updatedInspected);
+        setSelectedEventId((currentId) => {
+          if (currentId && fetchedEvents.some((e) => e.id === currentId)) {
+            return currentId;
           }
-        }
+          return fetchedEvents[0]?.id || null;
+        });
       }
     } catch {
     }
-  }, [sessionId, apiFetch, selectedStatus, inspectedEvent]);
+  }, [sessionId, apiFetch, selectedStatus]);
 
   useEffect(() => {
     if (isReady && sessionId) {
@@ -79,6 +80,16 @@ export default function DashboardPage() {
       return () => clearInterval(interval);
     }
   }, [isReady, sessionId, loadData]);
+
+  const filteredEvents = useMemo(() => {
+    if (!selectedEndpointFilter) return events;
+    return events.filter((e) => e.endpoint_id === selectedEndpointFilter);
+  }, [events, selectedEndpointFilter]);
+
+  const inspectedEvent = useMemo(() => {
+    if (!selectedEventId) return null;
+    return events.find((e) => e.id === selectedEventId) || null;
+  }, [events, selectedEventId]);
 
   const handleSeedDemo = async () => {
     setIsSeeding(true);
@@ -109,7 +120,7 @@ export default function DashboardPage() {
       const res = await apiFetch(`/api/events/${eventId}/replay`, { method: 'POST' });
       if (res.ok) {
         const data = (await res.json()) as { event: WebhookEvent };
-        setInspectedEvent(data.event);
+        setSelectedEventId(data.event.id);
       }
       await loadData();
     } finally {
@@ -129,14 +140,14 @@ export default function DashboardPage() {
 
   if (!isReady) {
     return (
-      <div className="min-h-screen bg-[#09090b] flex items-center justify-center text-zinc-500 font-mono text-xs">
-        Initializing session...
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-500 font-mono text-xs">
+        Initializing workbench sandbox...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col font-sans selection:bg-zinc-800 selection:text-zinc-100">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-indigo-100 selection:text-indigo-900">
       <Header
         sessionId={sessionId}
         onResetSession={resetSession}
@@ -144,40 +155,44 @@ export default function DashboardPage() {
         onOpenCreateEndpoint={() => setIsCreateEndpointOpen(true)}
         onOpenDispatch={() => openDispatch()}
         isSeeding={isSeeding}
+        stats={stats}
+      />
+
+      <EndpointStrip
+        endpoints={endpoints}
+        selectedEndpointId={selectedEndpointFilter}
+        onSelectEndpoint={setSelectedEndpointFilter}
+        onOpenCreateEndpoint={() => setIsCreateEndpointOpen(true)}
+        onOpenDispatch={openDispatch}
+        onRefresh={loadData}
+        apiFetch={apiFetch}
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-5 space-y-4">
-        <KpiStrip stats={stats} />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="lg:col-span-5">
+            <EventFeed
+              events={filteredEvents}
+              selectedEventId={selectedEventId}
+              onSelectEvent={(event) => setSelectedEventId(event.id)}
+              selectedStatus={selectedStatus}
+              onSelectStatus={setSelectedStatus}
+              onProcessRetries={handleProcessRetries}
+              isProcessingRetries={isProcessingRetries}
+            />
+          </div>
 
-        <EndpointsManager
-          endpoints={endpoints}
-          onRefresh={loadData}
-          onOpenCreateEndpoint={() => setIsCreateEndpointOpen(true)}
-          onOpenDispatch={openDispatch}
-          apiFetch={apiFetch}
-        />
-
-        <EventStream
-          events={events}
-          selectedStatus={selectedStatus}
-          onSelectStatus={setSelectedStatus}
-          onInspectEvent={(event) => setInspectedEvent(event)}
-          onReplayEvent={handleReplayEvent}
-          onProcessRetries={handleProcessRetries}
-          isProcessingRetries={isProcessingRetries}
-          isReplaying={isReplaying}
-        />
+          <div className="lg:col-span-7">
+            <EventInspector
+              event={inspectedEvent}
+              onReplay={handleReplayEvent}
+              isReplaying={isReplaying}
+            />
+          </div>
+        </div>
 
         <MockReceiverControl />
       </main>
-
-      <EventInspectorModal
-        event={inspectedEvent}
-        isOpen={Boolean(inspectedEvent)}
-        onClose={() => setInspectedEvent(null)}
-        onReplay={handleReplayEvent}
-        isReplaying={isReplaying}
-      />
 
       <DispatchModal
         isOpen={isDispatchOpen}
