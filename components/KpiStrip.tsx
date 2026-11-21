@@ -1,6 +1,5 @@
 'use client';
 
-import { CheckCircle2, Clock, AlertTriangle, Layers, Activity } from 'lucide-react';
 import type { DashboardStats } from '@/types';
 
 interface KpiStripProps {
@@ -9,78 +8,63 @@ interface KpiStripProps {
 
 export function KpiStrip({ stats }: KpiStripProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-      <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-xl p-4 transition hover:border-zinc-700">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-zinc-400">Total Ingested</span>
-          <Layers className="h-4 w-4 text-zinc-500" />
+    <div className="grid grid-cols-2 lg:grid-cols-4 bg-[#111113] border border-zinc-800 rounded-md overflow-hidden text-xs">
+      <div className="p-3.5 border-b lg:border-b-0 border-r border-zinc-800">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">
+          Total Ingested
+        </span>
+        <div className="mt-1 flex items-baseline space-x-2">
+          <span className="font-mono text-xl font-semibold text-zinc-100 tracking-tight">
+            {stats.total_events}
+          </span>
+          <span className="text-[11px] text-zinc-500 font-mono">events</span>
         </div>
-        <div className="mt-2 text-2xl font-bold tracking-tight text-zinc-100">
-          {stats.total_events}
-        </div>
-        <p className="mt-1 text-[11px] text-zinc-500">Unique webhook events</p>
       </div>
 
-      <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-xl p-4 transition hover:border-zinc-700">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-zinc-400">Success Rate</span>
-          <Activity className="h-4 w-4 text-emerald-400" />
-        </div>
-        <div className="mt-2 flex items-baseline space-x-1">
-          <span className="text-2xl font-bold tracking-tight text-emerald-400">
+      <div className="p-3.5 border-b lg:border-b-0 border-r-0 lg:border-r border-zinc-800">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">
+          Delivery Rate
+        </span>
+        <div className="mt-1 flex items-baseline space-x-2">
+          <span className="font-mono text-xl font-semibold text-zinc-100 tracking-tight">
             {stats.success_rate}%
           </span>
-          <span className="text-xs text-zinc-500">
+          <span className="text-[11px] text-zinc-500 font-mono">
             ({stats.delivered_count}/{stats.total_events || 0})
           </span>
         </div>
-        <div className="w-full bg-zinc-800 h-1 rounded-full mt-2 overflow-hidden">
-          <div
-            className="bg-emerald-500 h-full rounded-full transition-all duration-500"
-            style={{ width: `${stats.success_rate}%` }}
-          />
+      </div>
+
+      <div className="p-3.5 border-r border-zinc-800">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">
+          Active Retries
+        </span>
+        <div className="mt-1 flex items-baseline space-x-2">
+          <span
+            className={`font-mono text-xl font-semibold tracking-tight ${
+              stats.retrying_count > 0 ? 'text-amber-400' : 'text-zinc-100'
+            }`}
+          >
+            {stats.retrying_count}
+          </span>
+          <span className="text-[11px] text-zinc-500 font-mono">backoff active</span>
         </div>
       </div>
 
-      <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-xl p-4 transition hover:border-zinc-700">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-zinc-400">Delivered</span>
-          <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+      <div className="p-3.5">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">
+          Dead-Letter Queue
+        </span>
+        <div className="mt-1 flex items-baseline space-x-2">
+          <span
+            className={`font-mono text-xl font-semibold tracking-tight ${
+              stats.dead_letter_count > 0 ? 'text-rose-400' : 'text-zinc-100'
+            }`}
+          >
+            {stats.dead_letter_count}
+          </span>
+          <span className="text-[11px] text-zinc-500 font-mono">exhausted</span>
         </div>
-        <div className="mt-2 text-2xl font-bold tracking-tight text-zinc-100">
-          {stats.delivered_count}
-        </div>
-        <p className="mt-1 text-[11px] text-zinc-500">2xx HTTP acknowledged</p>
-      </div>
-
-      <div
-        className={`bg-zinc-900/70 border rounded-xl p-4 transition hover:border-zinc-700 ${
-          stats.retrying_count > 0 ? 'border-amber-500/40 bg-amber-950/10' : 'border-zinc-800/80'
-        }`}
-      >
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-amber-400">Active Retries</span>
-          <Clock className="h-4 w-4 text-amber-400" />
-        </div>
-        <div className="mt-2 text-2xl font-bold tracking-tight text-amber-400">
-          {stats.retrying_count}
-        </div>
-        <p className="mt-1 text-[11px] text-zinc-500">Exponential backoff active</p>
-      </div>
-
-      <div
-        className={`col-span-2 md:col-span-1 bg-zinc-900/70 border rounded-xl p-4 transition hover:border-zinc-700 ${
-          stats.dead_letter_count > 0 ? 'border-rose-500/40 bg-rose-950/10' : 'border-zinc-800/80'
-        }`}
-      >
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-rose-400">Dead-Letter Queue</span>
-          <AlertTriangle className="h-4 w-4 text-rose-400" />
-        </div>
-        <div className="mt-2 text-2xl font-bold tracking-tight text-rose-400">
-          {stats.dead_letter_count}
-        </div>
-        <p className="mt-1 text-[11px] text-zinc-500">Exhausted (Ready to Replay)</p>
       </div>
     </div>
   );
