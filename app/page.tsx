@@ -140,14 +140,14 @@ export default function DashboardPage() {
 
   if (!isReady) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-500 font-mono text-xs">
+      <div className="min-h-screen bg-[#09090b] flex items-center justify-center text-zinc-500 font-mono text-xs">
         Initializing workbench sandbox...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-indigo-100 selection:text-indigo-900">
+    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col font-sans selection:bg-indigo-900/50 selection:text-indigo-200">
       <Header
         sessionId={sessionId}
         onResetSession={resetSession}

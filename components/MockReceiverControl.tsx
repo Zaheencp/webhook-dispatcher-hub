@@ -39,31 +39,31 @@ export function MockReceiverControl() {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-md shadow-[0_1px_2px_rgba(15,23,42,0.04)] p-4 text-xs">
+    <div className="bg-[#121215] border border-zinc-800 rounded-md shadow-[0_1px_2px_rgba(0,0,0,0.3)] p-4 text-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="space-y-0.5">
           <div className="flex items-center space-x-2">
-            <Activity className="h-4 w-4 text-indigo-600" />
-            <span className="font-semibold text-slate-900">
+            <Activity className="h-4 w-4 text-indigo-400" />
+            <span className="font-semibold text-zinc-100">
               Mock Subscriber Sandbox
             </span>
-            <span className="font-mono text-[11px] text-slate-500">
+            <span className="font-mono text-[11px] text-zinc-400">
               /api/mock-receiver
             </span>
           </div>
-          <p className="text-slate-500 text-[11px]">
+          <p className="text-zinc-400 text-[11px]">
             Simulates a remote subscriber endpoint to verify exponential backoff retries, signature verification, and Dead-Letter Queueing.
           </p>
         </div>
 
         <div className="flex items-center space-x-2 shrink-0">
-          <div className="flex items-center bg-slate-100 p-0.5 rounded border border-slate-200 font-mono text-[11px]">
+          <div className="flex items-center bg-zinc-900 p-0.5 rounded border border-zinc-800 font-mono text-[11px]">
             <button
               onClick={() => setTestMode('success')}
               className={`px-2 py-1 rounded transition ${
                 testMode === 'success'
-                  ? 'bg-white text-emerald-700 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60 shadow-xs font-semibold'
+                  : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               200 OK
@@ -72,8 +72,8 @@ export function MockReceiverControl() {
               onClick={() => setTestMode('fail')}
               className={`px-2 py-1 rounded transition ${
                 testMode === 'fail'
-                  ? 'bg-white text-rose-700 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-rose-950/60 text-rose-300 border border-rose-800/60 shadow-xs font-semibold'
+                  : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               500 Error
@@ -82,8 +82,8 @@ export function MockReceiverControl() {
               onClick={() => setTestMode('timeout')}
               className={`px-2 py-1 rounded transition ${
                 testMode === 'timeout'
-                  ? 'bg-white text-amber-700 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-amber-950/60 text-amber-300 border border-amber-800/60 shadow-xs font-semibold'
+                  : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               408 Timeout
@@ -93,7 +93,7 @@ export function MockReceiverControl() {
           <button
             onClick={handleTestMock}
             disabled={isPinging}
-            className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded text-xs font-mono font-medium text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 transition shadow-xs disabled:opacity-50"
+            className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded text-xs font-mono font-medium text-zinc-200 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 transition shadow-xs disabled:opacity-50"
           >
             <Send className={`h-3 w-3 ${isPinging ? 'animate-spin' : ''}`} />
             <span>{isPinging ? 'Probing...' : 'Probe'}</span>
@@ -102,7 +102,7 @@ export function MockReceiverControl() {
       </div>
 
       {pingResult && (
-        <div className="mt-3 p-2.5 rounded bg-slate-50 border border-slate-200 font-mono text-[11px] text-slate-700 break-all">
+        <div className="mt-3 p-2.5 rounded bg-[#0e0e11] border border-zinc-800 font-mono text-[11px] text-zinc-300 break-all">
           {pingResult}
         </div>
       )}

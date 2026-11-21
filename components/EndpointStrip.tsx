@@ -60,9 +60,9 @@ export function EndpointStrip({
   };
 
   return (
-    <div className="bg-slate-50/80 border-b border-slate-200 px-4 sm:px-6 py-2 flex items-center justify-between gap-3 text-xs overflow-x-auto">
+    <div className="bg-[#0e0e11] border-b border-zinc-800/80 px-4 sm:px-6 py-2 flex items-center justify-between gap-3 text-xs overflow-x-auto">
       <div className="flex items-center space-x-2 shrink-0">
-        <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold mr-1">
+        <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-500 font-semibold mr-1">
           Endpoints
         </span>
 
@@ -70,8 +70,8 @@ export function EndpointStrip({
           onClick={() => onSelectEndpoint(null)}
           className={`px-2.5 py-1 rounded text-xs font-mono transition border ${
             selectedEndpointId === null
-              ? 'bg-white text-indigo-700 border-indigo-200 shadow-sm font-semibold'
-              : 'bg-transparent text-slate-600 hover:text-slate-900 border-transparent hover:bg-slate-100'
+              ? 'bg-[#18181b] text-indigo-400 border-indigo-500/50 shadow-sm font-semibold'
+              : 'bg-transparent text-zinc-400 hover:text-zinc-200 border-transparent hover:bg-zinc-900'
           }`}
         >
           All ({endpoints.length})
@@ -85,27 +85,27 @@ export function EndpointStrip({
               onClick={() => onSelectEndpoint(ep.id)}
               className={`group flex items-center space-x-2 px-2.5 py-1 rounded border transition cursor-pointer font-mono text-xs ${
                 isSelected
-                  ? 'bg-white text-slate-900 border-indigo-300 shadow-sm ring-1 ring-indigo-200'
-                  : 'bg-white/80 text-slate-600 hover:text-slate-900 border-slate-200 hover:border-slate-300'
+                  ? 'bg-[#18181b] text-zinc-100 border-indigo-500/60 shadow-sm ring-1 ring-indigo-500/30'
+                  : 'bg-zinc-900/60 text-zinc-300 hover:text-white border-zinc-800 hover:border-zinc-700'
               }`}
             >
               <span
                 className={`h-1.5 w-1.5 rounded-full ${
-                  ep.is_active ? 'bg-emerald-500' : 'bg-slate-400'
+                  ep.is_active ? 'bg-emerald-400' : 'bg-zinc-600'
                 }`}
               />
               <span className="font-medium">{ep.name}</span>
-              <span className="text-[11px] text-slate-400 truncate max-w-[100px]" title={ep.url}>
+              <span className="text-[11px] text-zinc-500 truncate max-w-[100px]" title={ep.url}>
                 {ep.url.replace(/^https?:\/\/[^/]+/, '') || ep.url}
               </span>
 
               <button
                 onClick={(e) => handleCopySecret(e, ep)}
                 title="Copy signing secret"
-                className="text-slate-400 hover:text-slate-700 transition ml-0.5"
+                className="text-zinc-500 hover:text-zinc-300 transition ml-0.5"
               >
                 {copiedId === ep.id ? (
-                  <Check className="h-3 w-3 text-emerald-600" />
+                  <Check className="h-3 w-3 text-emerald-400" />
                 ) : (
                   <Copy className="h-3 w-3" />
                 )}
@@ -117,7 +117,7 @@ export function EndpointStrip({
                   onOpenDispatch(ep.id);
                 }}
                 title="Send test event"
-                className="text-slate-400 hover:text-indigo-600 transition"
+                className="text-zinc-500 hover:text-indigo-400 transition"
               >
                 <Send className="h-2.5 w-2.5" />
               </button>
@@ -125,7 +125,7 @@ export function EndpointStrip({
               <button
                 onClick={(e) => handleToggleActive(e, ep)}
                 title={ep.is_active ? 'Pause endpoint' : 'Resume endpoint'}
-                className="text-slate-400 hover:text-amber-600 transition"
+                className="text-zinc-500 hover:text-amber-400 transition"
               >
                 <Power className="h-2.5 w-2.5" />
               </button>
@@ -133,7 +133,7 @@ export function EndpointStrip({
               <button
                 onClick={(e) => handleDelete(e, ep.id)}
                 title="Delete endpoint"
-                className="text-slate-400 hover:text-rose-600 transition opacity-0 group-hover:opacity-100"
+                className="text-zinc-500 hover:text-rose-400 transition opacity-0 group-hover:opacity-100"
               >
                 <Trash2 className="h-2.5 w-2.5" />
               </button>
@@ -145,7 +145,7 @@ export function EndpointStrip({
       <div className="flex items-center space-x-2 shrink-0">
         <button
           onClick={onOpenCreateEndpoint}
-          className="inline-flex items-center space-x-1 text-slate-500 hover:text-indigo-600 font-mono text-xs transition"
+          className="inline-flex items-center space-x-1 text-zinc-400 hover:text-indigo-400 font-mono text-xs transition"
         >
           <Plus className="h-3 w-3" />
           <span>Add</span>

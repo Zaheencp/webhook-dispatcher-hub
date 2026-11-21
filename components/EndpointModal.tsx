@@ -70,18 +70,18 @@ export function EndpointModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-100">
-      <div className="bg-white border border-slate-200 rounded-lg w-full max-w-lg overflow-hidden shadow-xl">
-        <div className="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in duration-100">
+      <div className="bg-[#121215] border border-zinc-800 rounded-lg w-full max-w-lg overflow-hidden shadow-2xl">
+        <div className="px-5 py-3.5 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/60">
           <div className="flex items-center space-x-2">
-            <Key className="h-4 w-4 text-indigo-600" />
-            <span className="text-sm font-semibold text-slate-900">
+            <Key className="h-4 w-4 text-indigo-400" />
+            <span className="text-sm font-semibold text-zinc-100">
               Register Webhook Subscriber Endpoint
             </span>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+            className="p-1 rounded text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition"
           >
             <X className="h-4 w-4" />
           </button>
@@ -89,30 +89,30 @@ export function EndpointModal({
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs">
           {error && (
-            <div className="p-3 rounded bg-rose-50 border border-rose-200 text-rose-700 font-mono text-xs">
+            <div className="p-3 rounded bg-rose-950/40 border border-rose-800/60 text-rose-300 font-mono text-xs">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-slate-700 font-medium mb-1">Friendly Name</label>
+            <label className="block text-zinc-300 font-medium mb-1">Friendly Name</label>
             <input
               type="text"
               placeholder="e.g. Production Payment Gateway"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full bg-white border border-slate-300 rounded-md px-3 py-1.5 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 font-mono text-xs"
+              className="w-full bg-[#0e0e11] border border-zinc-800 rounded-md px-3 py-1.5 text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-mono text-xs"
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-slate-700 font-medium">Destination URL</label>
+              <label className="text-zinc-300 font-medium">Destination URL</label>
               <button
                 type="button"
                 onClick={() => setUrl('/api/mock-receiver?mode=success')}
-                className="text-[11px] font-mono text-indigo-600 hover:text-indigo-800 underline"
+                className="text-[11px] font-mono text-indigo-400 hover:text-indigo-300 underline"
               >
                 Use Mock Receiver
               </button>
@@ -123,12 +123,12 @@ export function EndpointModal({
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               required
-              className="w-full bg-white border border-slate-300 rounded-md px-3 py-1.5 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 font-mono text-xs"
+              className="w-full bg-[#0e0e11] border border-zinc-800 rounded-md px-3 py-1.5 text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-mono text-xs"
             />
           </div>
 
           <div>
-            <label className="block text-slate-700 font-medium mb-1">
+            <label className="block text-zinc-300 font-medium mb-1">
               Subscribed Events (comma-separated or * for all)
             </label>
             <input
@@ -136,27 +136,27 @@ export function EndpointModal({
               placeholder="order.created, payment.succeeded, *"
               value={subscribedEvents}
               onChange={(e) => setSubscribedEvents(e.target.value)}
-              className="w-full bg-white border border-slate-300 rounded-md px-3 py-1.5 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 font-mono text-xs"
+              className="w-full bg-[#0e0e11] border border-zinc-800 rounded-md px-3 py-1.5 text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-mono text-xs"
             />
           </div>
 
-          <div className="p-3 rounded bg-slate-50 border border-slate-200 text-[11px] font-mono text-slate-600 space-y-1">
-            <span className="text-slate-800 font-medium block">Automatic Signing Secret</span>
-            <span>A cryptographically secure <code className="text-indigo-600">whsec_...</code> HMAC key will be generated for cryptographic payload signing.</span>
+          <div className="p-3 rounded bg-zinc-950/60 border border-zinc-800 text-[11px] font-mono text-zinc-400 space-y-1">
+            <span className="text-zinc-200 font-medium block">Automatic Signing Secret</span>
+            <span>A cryptographically secure <code className="text-indigo-400">whsec_...</code> HMAC key will be generated for payload signing.</span>
           </div>
 
-          <div className="flex items-center justify-end space-x-2 pt-3 border-t border-slate-200">
+          <div className="flex items-center justify-end space-x-2 pt-3 border-t border-zinc-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-800 transition"
+              className="px-3 py-1.5 rounded-md text-xs font-medium text-zinc-400 hover:text-zinc-200 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-3.5 py-1.5 rounded-md text-xs font-medium bg-indigo-600 hover:bg-indigo-700 text-white transition disabled:opacity-50 shadow-sm flex items-center space-x-1"
+              className="px-3.5 py-1.5 rounded-md text-xs font-medium bg-indigo-600 hover:bg-indigo-500 text-white transition disabled:opacity-50 shadow-sm flex items-center space-x-1"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>{isSubmitting ? 'Registering...' : 'Register Endpoint'}</span>
